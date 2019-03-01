@@ -1,0 +1,22 @@
+May 1 2014
+
+
+Changes from MatPIV 1.6.1 to 1.7
+-----------------------------------------
+
+
+
+UPDATED FILES:
+-------------
+
+MATPIV - new iteration method using the Fourier shift property ('multinfft') based on the Qian and Cowen (2005) paper.
+
+
+NEW FILES:
+---------
+
+MULTIPASSX_NEW - file used for the 'multinfft' option. This file loops iteratively for each vector individually until a convergence criterion is met. This criterion is by default fixed at 0.005 pixels. This is perhaps too stringent. However, the effect of changing this has not been thoroughly tested.
+
+UNIFILT - a shameless copy of the universal outlier detection scheme from the Westerweel and Scarano paper.
+
+READMYIMAGE - a new function to read images from file. This function avoids the use of MATLAB functions that are specific to the Image Processing Toolbox and uses its own internal checks for image types etc.

@@ -1,0 +1,62 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Gonzales and Woods(1992)]{Gonzales:1992}
+Rafael~C. Gonzales and Richard~E. Woods.
+\newblock {\em Digital Image Processing}.
+\newblock Addison-Wesley, 1992.
+
+\bibitem[Grue et~al.(1999)Grue, Jensen, Rus{\aa}s, and Sveen]{Grue:1999}
+J.~Grue, A.~Jensen, P-O. Rus{\aa}s, and J.K. Sveen.
+\newblock Properties of large amplitude internal waves.
+\newblock {\em J. Fluid Mech.}, 380:\penalty0 257--278, 1999.
+
+\bibitem[Gui and Merzkirch(1996)]{Gui:1996}
+L.~Gui and W.~Merzkirch.
+\newblock Generating arbitrarily sized interrogation windows for
+  correlation-based analysis of particle image velocimetry recordings.
+\newblock {\em Exp. Fluids}, 21:\penalty0 465--468, 1996.
+
+\bibitem[Gui and Merzkirch(2000)]{Gui:2000}
+L.~Gui and W.~Merzkirch.
+\newblock A comparative study of the mqd method and several correlation-based
+  piv evaluation algorithms.
+\newblock {\em Exp. Fluids}, 28:\penalty0 36--44, 2000.
+
+\bibitem[Jensen et~al.(2001)Jensen, Sveen, Grue, Richon, and Gray]{Jensen:1999}
+Atle Jensen, J.~Kristian Sveen, John Grue, Jean-Baptiste Richon, and Callum
+  Gray.
+\newblock Accelerations in water waves by extended particle image velocimetry.
+\newblock {\em Experiments in fluids}, 30:\penalty0 500--510, 2001.
+
+\bibitem[Keane and Adrian(1992)]{Keane:1992}
+Richard~D. Keane and Ronald~J. Adrian.
+\newblock Theory of cross-correlation analysis of piv images.
+\newblock {\em Applied Scientific Research}, 49:\penalty0 191--215, 1992.
+
+\bibitem[Raffel et~al.(1998)Raffel, Willert, and Kompenhans]{Raffel:1998}
+M.~Raffel, C.~E. Willert, and J.~Kompenhans.
+\newblock {\em Particle Image Velocimetry, A Practical Guide}.
+\newblock Springer Verlag, first edition, 1998.
+
+\bibitem[Sveen and Cowen(2004)]{Sveen:2004}
+J.~K. Sveen and E.~A. Cowen.
+\newblock Quantitative imaging techniques and their application to wavy flow.
+\newblock In J.~Grue, P.~L.~F. Liu, and G.~K. Pedersen, editors, {\em PIV and
+  Water Waves}. World Scientific, 2004.
+
+\bibitem[Westerweel(1993)]{Westerweel:1993}
+J.~Westerweel.
+\newblock {\em Digital Particle Image Velocimetry- Theory and Application}.
+\newblock PhD thesis, Delft University of Technology, The Netherlands, 1993.
+
+\bibitem[Westerweel et~al.(1997)Westerweel, Dabiri, and
+  Gharib]{Westerweel:1997}
+J.~Westerweel, D.~Dabiri, and M.~Gharib.
+\newblock The effect of a discrete window offset on the accuracy of
+  cross-correlation analysis of digital piv recordings.
+\newblock {\em Exp. Fluids}, 23:\penalty0 20--28, 1997.
+
+\end{thebibliography}

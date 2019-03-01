@@ -1,0 +1,137 @@
+# Thu Jan  6 19:37:45 2011
+# Timing
+dfd.time.fNow:=0;
+dfd.time.tNow:=0.0;
+dfd.time.tStep:=1.00000000000000;
+dfd.time.tFirst:=0.0;
+#
+# Drawing
+hDraw := draw_start(width:=640,height:=480,description:="Unspecified DigiFlow drawing",coordSystem:="(unit)");
+draw_set_axes(hDraw,xMin:=502.000000000000,xMax:=507.000000000000,yMin:=-4.56698151392432,yMax:=4.56698151392432,xLog:=false,yLog:=false,spaceAxes:=true,spaceAlternate:=false);
+draw_x_axis(hDraw,title:="$t$  (s)",ticks:=0.0,minorTicks:=0.0,grid:=false,labels:=true);
+draw_top_axis(hDraw,xMin:=0.0,xMax:=0.0,title:="",xLog:=true,ticks:=0.0,minorTicks:=0.0,labels:=false);
+draw_y_axis(hDraw,title:="Velocity  (pixels/s)",ticks:=0.0,minorTicks:=0.0,grid:=false,labels:=true);
+draw_right_axis(hDraw,yMin:=0.0,yMax:=0.0,title:="",yLog:=true,ticks:=0.0,minorTicks:=0.0,labels:=false);
+draw_line_colour(hDraw,colour:="black");
+draw_line(hDraw,x0:=507.000000000000,y0:=0.0,x1:=502.000000000000,y1:=0.0,keepPoint:=true);
+draw_create_key(hDraw,x:=502.250000000000,y:=-0.913396302784865,title:="Key",size:=1.00000000000000);
+draw_line_colour(hDraw,colour:="blue");
+draw_line_style(hDraw,style:="solid",scale:=1.00000000000000);
+draw_group_begin(hDraw,name:="uMean");
+draw_begin_lineto(hDraw,moveToFirst:=true);
+ #Data: xThrough,yThrough
+ 502.000000000000 -0.448574035292663
+ 503.000000000000 0.586119055067635
+ 504.000000000000 0.263973334303933
+ 505.000000000000 0.474559374324191
+ 506.000000000000 1.38824428540089
+ 507.000000000000 1.25583719545076
+end_data; #line
+draw_group_end(hDraw,name:="(group)");
+draw_key_entry(hDraw,name:="$\bar{u}    (<\bar{u}> = 0.56)$",line:=true,mark:=false);
+draw_line_style(hDraw,style:="dash",scale:=1.00000000000000);
+draw_line(hDraw,x0:=507.000000000000,y0:=0.560513902572403,x1:=502.000000000000,y1:=0.560513902572403,keepPoint:=true);
+draw_line_colour(hDraw,colour:="red");
+draw_line_style(hDraw,style:="solid",scale:=1.00000000000000);
+draw_group_begin(hDraw,name:="vMean");
+draw_begin_lineto(hDraw,moveToFirst:=true);
+ #Data: xThrough,yThrough
+ 502.000000000000 1.34262900778034
+ 503.000000000000 0.866305268946651
+ 504.000000000000 0.891567801505283
+ 505.000000000000 2.417433696391623E-002
+ 506.000000000000 0.947358748658402
+ 507.000000000000 0.777638573735619
+end_data; #line
+draw_group_end(hDraw,name:="(group)");
+draw_key_entry(hDraw,name:="$\bar{v}    (<\bar{v}> = 0.80)$",line:=true,mark:=false);
+draw_line_style(hDraw,style:="dash",scale:=1.00000000000000);
+draw_line(hDraw,x0:=507.000000000000,y0:=0.799271043367450,x1:=502.000000000000,y1:=0.799271043367450,keepPoint:=true);
+draw_line_colour(hDraw,colour:="dark grey");
+draw_line_style(hDraw,style:="solid",scale:=1.00000000000000);
+draw_group_begin(hDraw,name:="sMean");
+draw_begin_lineto(hDraw,moveToFirst:=true);
+ #Data: xThrough,yThrough
+ 502.000000000000 3.61925040470897
+ 503.000000000000 3.36607933743318
+ 504.000000000000 3.48022380896783
+ 505.000000000000 4.56698151392432
+ 506.000000000000 4.25542991882169
+ 507.000000000000 4.01813472420699
+end_data; #line
+draw_group_end(hDraw,name:="(group)");
+draw_key_entry(hDraw,name:="$\bar{s}    (<\bar{s}> = 3.90)$",line:=true,mark:=false);
+draw_line_style(hDraw,style:="dash",scale:=1.00000000000000);
+draw_line(hDraw,x0:=507.000000000000,y0:=3.89787653757474,x1:=502.000000000000,y1:=3.89787653757474,keepPoint:=true);
+draw_line_colour(hDraw,colour:="cyan");
+draw_line_style(hDraw,style:="solid",scale:=1.00000000000000);
+draw_group_begin(hDraw,name:="uPrime");
+draw_begin_lineto(hDraw,moveToFirst:=true);
+ #Data: xThrough,yThrough
+ 502.000000000000 3.06317547395562
+ 503.000000000000 2.73022844487051
+ 504.000000000000 2.82976424135803
+ 505.000000000000 3.86300462569939
+ 506.000000000000 3.01565106549497
+ 507.000000000000 3.35186149656671
+end_data; #line
+draw_group_end(hDraw,name:="(group)");
+draw_key_entry(hDraw,name:="$u\prime    (<u\prime> = 3.24)$",line:=true,mark:=false);
+draw_line_style(hDraw,style:="dash",scale:=1.00000000000000);
+draw_line(hDraw,x0:=507.000000000000,y0:=3.24489901536989,x1:=502.000000000000,y1:=3.24489901536989,keepPoint:=true);
+draw_line_colour(hDraw,colour:="magenta");
+draw_line_style(hDraw,style:="solid",scale:=1.00000000000000);
+draw_group_begin(hDraw,name:="vPrime");
+draw_begin_lineto(hDraw,moveToFirst:=true);
+ #Data: xThrough,yThrough
+ 502.000000000000 2.73705024639954
+ 503.000000000000 2.73894362723822
+ 504.000000000000 2.65406969127986
+ 505.000000000000 3.58086884414232
+ 506.000000000000 3.65507363855089
+ 507.000000000000 2.98517497897738
+end_data; #line
+draw_group_end(hDraw,name:="(group)");
+draw_key_entry(hDraw,name:="$v\prime    (<v\prime> = 3.12)$",line:=true,mark:=false);
+draw_line_style(hDraw,style:="dash",scale:=1.00000000000000);
+draw_line(hDraw,x0:=507.000000000000,y0:=3.11942775399448,x1:=502.000000000000,y1:=3.11942775399448,keepPoint:=true);
+draw_line_colour(hDraw,colour:="grey");
+draw_line_style(hDraw,style:="solid",scale:=1.00000000000000);
+draw_group_begin(hDraw,name:="sPrime");
+draw_begin_lineto(hDraw,moveToFirst:=true);
+ #Data: xThrough,yThrough
+ 502.000000000000 2.40403532861831
+ 503.000000000000 2.17243867904078
+ 504.000000000000 1.95045350963227
+ 505.000000000000 2.66718901972173
+ 506.000000000000 2.67763732657275
+ 507.000000000000 2.48650101512955
+end_data; #line
+draw_group_end(hDraw,name:="(group)");
+draw_key_entry(hDraw,name:="$s\prime    (<s\prime> = 2.45)$",line:=true,mark:=false);
+draw_line_style(hDraw,style:="dash",scale:=1.00000000000000);
+draw_line(hDraw,x0:=507.000000000000,y0:=2.45352148266659,x1:=502.000000000000,y1:=2.45352148266659,keepPoint:=true);
+draw_end(hDraw,boundingBox:=false);
+#
+# Documentation
+#####
+# DigiFlow Drawing
+#####
+dfd.userComments:={/
+No user comments
+/};
+dfd.creatingProcess:={/
+dlgAnalyse_PTVBasicStatistics.CoordSystem := "(default)";
+dlgAnalyse_PTVBasicStatistics.DisplayOnExit := true;
+dlgAnalyse_PTVBasicStatistics.Input := "test####.dft";
+dlgAnalyse_PTVBasicStatistics.Input_Options.Display := true;
+dlgAnalyse_PTVBasicStatistics.Input_Region.Kind := "Conform";
+dlgAnalyse_PTVBasicStatistics.Input_Time.TimeStepFile :=  1.00000    ;
+dlgAnalyse_PTVBasicStatistics.Output := "test.dfd";
+dlgAnalyse_PTVBasicStatistics.Output_Options.DeleteExisting := true;
+dlgAnalyse_PTVBasicStatistics.Output_Options.Display := true;
+dlgAnalyse_PTVBasicStatistics.VelMethod := "quadratic";
+dlgAnalyse_PTVBasicStatistics.VelPath :=            4;
+dlgAnalyse_PTVBasicStatistics.process := "Analyse_PTVBasicStatistics";
+# process dlgAnalyse_PTVBasicStatistics;
+ /};
