@@ -31,6 +31,10 @@ elseif wasuint16
   out=uint8(out);    
 end
 
+% Alex for the PIV Eilat
+% out = imcomplement(out);
+
+
 function [im]=rgbconvert(im)
 % Helper code copied from mrgb2gray
 % Returns a double, regardless of input

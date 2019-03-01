@@ -41,7 +41,7 @@ if nargin==6
     %[datax,datay]=firstpass(A,B,winsize,overlap,counter,[],[]);
 end
 disp('* First Pass')
-[x,y,datax,datay]=firstpass(A,B,winsize,overlap,counter,[],[],maske);
+[x,y,datax,datay]=firstpass(A,B,winsize,overlap,[],[],maske);
 
 [datax1,datay1]=globfilt(x,y,datax,datay,3);
 [datax1,datay1]=localfilt(x,y,datax1,datay1,sensit,'median',3,maske);
@@ -69,7 +69,7 @@ datax=floor(datax); datay=floor(datay);
 % now using smaller interrogation windows 
 % to utilize the smaller S/N introduced with window offset.
 disp('* Second Pass')
-[x,y,datax2,datay2]=firstpass(A,B,winsize,overlap,counter,datax,datay,maske);
+[x,y,datax2,datay2]=firstpass(A,B,winsize,overlap,datax,datay,maske);
 [datax3,datay3]=globfilt(x,y,datax2,datay2,3);
 [datax3,datay3]=localfilt(x,y,datax3,datay3,sensit,'median',3,maske);
 [datax1,datay1]=naninterp(datax3,datay3,'linear',maske,x,y);

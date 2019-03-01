@@ -21,11 +21,11 @@ comlen=8; % length of comet trajectories to display during particle location
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % particle property parameters
-pproperties.pmax=40; % maximum size of particles
-pproperties.pmin=3; % minimum size of particles
-pproperties.xminsize=2; % minimum size in x direction, usually smart to set>1 to
+props.pmax=40; % maximum size of particles
+props.pmin=3; % minimum size of particles
+props.xminsize=2; % minimum size in x direction, usually smart to set>1 to
            % avoid 1 pixel wide particles
-pproperties.yminsize=2; %as above	   
+props.yminsize=2; %as above	   
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,3 +59,21 @@ maxerror=2; %max squared error in position estimate (default=2)
   locker=3; %Size of the kernel in the local filter
   globthr=3; %Global filter threshold
   intermet='linear'; %Interpolation method, 'linear','weighted'
+  
+  
+  %{
+  res = matptv('example_myptvsettings');
+  figure
+  for i = 2:length(res)
+    x = res(i).blobs.centr(:,1);
+    y = res(i).blobs.centr(:,2);
+    u = res(i).blobs.ptvvel(:,1);
+    v = res(i).blobs.ptvvel(:,2);
+    plot(x,y,'.')
+    hold on
+    quiver(x,y,u,v,1)
+    drawnow
+    pause(.1)
+    hold off
+   end
+  %}   

@@ -56,7 +56,7 @@ if size(wins,1)==1
         wins=[wins, wins];
     end
     for jj=1:iter-2
-        wins=[wins; wins(end,:)/2];
+        wins=[wins; wins(end,:)/2]; %#ok<AGROW>
     end
 end
 
@@ -65,11 +65,14 @@ if ~isempty(datax)
   disp(['  ===> Using supplied velocity field as input...with size',num2str(size(datax)),'.'])
   [dy,dx]=size(datax); 
   %winsize in startu and startv matrices
-  Wx=floor(sx/dx)/(-overlap+1);  Wy=floor(sy/dy)/(-overlap+1);
-  Wi=[1:Wx*(1-overlap):sx-Wx+1];
-  Wj=[1:Wy*(1-overlap):sy-Wy+1];
-  Si=[1:wins(1,1)*(1-overlap):sy-wins(1,1)+1];
-  Sj=[1:wins(1,2)*(1-overlap):sx-wins(1,2)+1];
+  Wx=floor(sx/dx)/(-overlap+1);  
+  Wy=floor(sy/dy)/(-overlap+1);
+  
+  Wi = 1:Wx*(1-overlap):sx-Wx+1;
+  Wj = 1:Wy*(1-overlap):sy-Wy+1;
+  
+  Si = 1:wins(1,1)*(1-overlap):sy-wins(1,1)+1;
+  Sj = 1:wins(1,2)*(1-overlap):sx-wins(1,2)+1;
   datax=round(interp2(Wi,Wj',datax,Si,Sj'));
   datay=round(interp2(Wi,Wj',datay,Si,Sj'));  
   disp(['Interpolated to ',num2str(size(datax))])
@@ -80,7 +83,7 @@ end
 
 for i=1:iter-1
     disp(['* Pass No: ',num2str(i)])
-    if i==1 & ~isempty(datax)
+    if i==1 && ~isempty(datax)
         [x,y,datax,datay]=firstpass(A,B,wins(i,:),overlap,[],[],maske);
     else
         [x,y,datax,datay]=firstpass(A,B,wins(i,:),overlap,datax,datay,maske);
@@ -94,21 +97,22 @@ for i=1:iter-1
     % expand the velocity data to twice the original size
     %if i~=iter-1 
     if wins(i,1)~=wins(i+1,1)    
-      X=(1:((1-overlap)*2*wins(i+1,1)):sx-2*wins(i+1,1)+1) + wins(i+1,1);
+      % X=(1:((1-overlap)*2*wins(i+1,1)):sx-2*wins(i+1,1)+1) + wins(i+1,1);
       XI=(1:((1-overlap)*wins(i+1,1)):sx-wins(i+1,1)+1)+(wins(i+1,1))/2;
     else
       XI=(1:((1-overlap)*wins(i+1,1)):sx-wins(i+1,1)+1)+(wins(i+1,1))/2; X=XI;
     end
     if wins(i,2)~=wins(i+1,2)
-      Y=(1:((1-overlap)*2*wins(i+1,2)):sy-2*wins(i+1,2)+1) + wins(i+1,2);
+      % Y=(1:((1-overlap)*2*wins(i+1,2)):sy-2*wins(i+1,2)+1) + wins(i+1,2);
       YI=(1:((1-overlap)*wins(i+1,2)):sy-wins(i+1,2)+1)+(wins(i+1,2))/2; 
     else
-      YI=(1:((1-overlap)*wins(i+1,2)):sy-wins(i+1,2)+1)+(wins(i+1,2))/2; Y=YI;
+      YI=(1:((1-overlap)*wins(i+1,2)):sy-wins(i+1,2)+1)+(wins(i+1,2))/2; 
+      % Y=YI;
     end
     
     disp('   Expanding velocity-field for next pass')
-    datax=round(interp2(X,Y',datax,XI,YI'));
-    datay=round(interp2(X,Y',datay,XI,YI'));
+    datax=round(interp2(x(1,:),y(:,1),datax,XI,YI'));
+    datay=round(interp2(x(1,:),y(:,1),datay,XI,YI'));
     [datax,datay]=naninterp(datax,datay,'linear',maske,...
 			    repmat(XI,size(datax,1),1),repmat(YI',1,size(datax,2)));
     
@@ -118,7 +122,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Final pass. Gives displacement to subpixel accuracy.
 disp('* Final Pass')
-[x,y,u,v,SnR,Pkh]=finalpass_new(A,B,wins(end,:),overlap,round(datax),...
+[x,y,u,v,SnR,Pkh,brc] = finalpass_new(A,B,wins(end,:),overlap,round(datax),...
 			    round(datay),Dt,maske);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(' ')

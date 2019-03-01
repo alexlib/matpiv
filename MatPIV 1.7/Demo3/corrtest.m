@@ -1,7 +1,7 @@
-A=imread('/hom/jks/matpiv/Version1.6/Demo3/mpim1b.bmp');
+A=imread('mpim1b.bmp');
 A=double(A);
 
-B=imread('/hom/jks/matpiv/Version1.6/Demo3/mpim1c.bmp');
+B=imread('mpim1c.bmp');
 B=double(B);
 tel=1;
 subplot(3,1,1)
