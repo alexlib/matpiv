@@ -22,8 +22,8 @@ counter=1;         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Image read
 [A p1]=imread(im1);
 [B p2]=imread(im2);
-if any([misrgb(A), misrgb(B)])
-  A=mrgb2gray(A); B=mrgb2gray(B);
+if any([isrgb(A), isrgb(B)])
+  A=rgb2gray(A); B=rgb2gray(B);
 end
 
 if ~isempty(p1), A=ind2gray(A,p1); end

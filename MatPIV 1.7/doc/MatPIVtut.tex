@@ -1,29 +1,17 @@
 \documentclass{book}
-\usepackage{multirow,amssymb,amsmath,float,graphpap,rotating,times,amsbsy,subfigure}
-\usepackage[latin1]{inputenc}  % Use latin-1 character set for input
-%\usepackage[utf8]{inputenc} 
-\usepackage[english]{babel}    % Use English hyphenation
-\usepackage{authblk}
-\renewcommand\Authands{ and }
-\usepackage{url}
-\usepackage{natbib}
+
+%\usepackage[norsk]{babel}
+\usepackage{times,amssymb,amsmath}
 \usepackage[dvips]{epsfig}
-
-%\documentclass{book}
-%
-%%\usepackage[norsk]{babel}
-%\usepackage{times,amssymb,amsmath}
-%\usepackage[dvips]{epsfig}
-%\usepackage{natbib}
+\usepackage{natbib}
 \usepackage{a4wide}
-%\usepackage{t1enc}
+\usepackage{t1enc}
 \newcommand{\matpiv}{{\bf MatPIV~}}
-
-\title{An introduction to {\bf MatPIV} v. 1.7}
-\author[1,2]{J. Kristian Sveen}
-\author[1]{Jostein Kolaas}
-\affil[1]{University of Oslo, Department of Mathematics, Section for Mechanics, Norway}
-\affil[2]{Process Technology and Fluid Flow Department, Institute for Energy Technology, Norway}
+\title{An introduction to {\bf MatPIV} v. 1.6.1}
+\author{Johan Kristian Sveen\\
+{\small Center for Mathematical Sciences,} \\
+{\small Department of Applied Mathematics and Theoretical Physics,} \\
+{\small University of Cambridge, UK}}
 
 \date{\today}
 \begin{document}
@@ -42,7 +30,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 The GNU General Public License can be found on the World Wide Web at
-\url{http://www.gnu.org/copyleft/gpl.html} or it can be obtained by writing to
+http://www.gnu.org/copyleft/gpl.html or it can be obtained by writing to
 the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 MA 02111-1307, USA.
 
@@ -50,8 +38,7 @@ MA 02111-1307, USA.
 
 
 \tableofcontents
-%\newpage
-
+\newpage
 \chapter*{Introduction}
 
 MatPIV is a program written for the authors personal educational
@@ -61,14 +48,17 @@ Particle Image Velocimetry method used here. Users/Readers are advised
 to consult my review paper on PIV~\citep{Sveen:2004}, a decent book on the
 subject, e.g.~\cite{Raffel:1998}, the PhD thesis
 by~\cite{Westerweel:1993}, and finally the various articles written by
-different authors over the last two decades or so (some references are
+different authors over the last decade or so (some references are
 included in the bibliography list). 
 
-The \matpiv distribution comes with 5 different sets of demo-images
+The \matpiv distribution comes with 3 different sets of demo-images
 which are taken from the papers by~\cite{Grue:1999}
 and~\cite{Jensen:1999}.
 
-As of version 1.7, \matpiv requires the MATLAB Image processing toolbox to operate.
+The \matpiv files have been tested on Linux machines only, with MATLAB
+versions from 5.2.1.1420 and up to 6.5.0. It is recommended that users
+have the Image processing toolbox, although a few workarounds do
+exist.
 
 The aim of the present document is primarily to give an overview of the
 functionality of the \matpiv toolbox. At the time of writing, \matpiv is
@@ -361,8 +351,6 @@ vector values using a nearest neighbor interpolation.
  Interpolating outliers: ....................................
 ....................2161 Nan's interpolated.
 \end{verbatim}
-
-As of version 1.7, \matpiv also comes with a copy of the universal outlier detection published by~\cite{Westerweel2005}.
 
 \subsection{Visualizing the results}
 Figure~\ref{fig:velo} shows $1/4$ of the velocity-vectors plotted using
@@ -1164,6 +1152,6 @@ msk='Demo1/polymask.mat'; %file defining the regions to mask from the
 %% \end{verbatim}
 
 
-\bibliography{C:\Users\jks\Documents\UiO\Papers\Minkowski' diff paper'\OpticalTechniquesFluidMechanics}
+\bibliography{/home/raid/fdl/jks36/biblio_felles}
 \bibliographystyle{plainnat}
 \end{document}

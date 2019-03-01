@@ -9,9 +9,8 @@ function [bg]=magnitude(x,y,u,v)
 % magnitude(u,v) plots  sqrt(u.^2 + v.^2) without x and y-axis
 %
 % c. 31 july 2000, jks@math.uio.no
-% revisions: Nov 12, 2004
 %
-% for use with MatPIV 1.5+
+% for use with MatPIV 1.5
 
   
 % first we check to see if the input data are vectors or
@@ -33,7 +32,7 @@ if nargin==1
     end
     statusen==0;
   end
-elseif nargin==2 | nargin==3
+elseif nargin==3
     statusen=0;
 end
     
@@ -68,7 +67,7 @@ elseif nargin==2
     ii=~isnan(x);
     bg=sqrt(x.^2 + y.^2);
     if nargout==0
-        pcolor(bg);
+        pcolor(bg(ii));
         hold on
         scale=1/max(bg(:));
         xx= ones(size(x,1),1)*[1:size(x,2)];

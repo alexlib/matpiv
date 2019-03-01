@@ -1,5 +1,5 @@
 function y = mnanmean(x)
-% MNANMEAN NaN protected mean value.
+% MNANMEAN NaN protected median value.
 %   MNANMEAN(X) returns the mean treating NaNs as missing values.
 %   For vectors, MNANMEAN(X) is the mean value of the non-NaN
 %   elements in X.  For matrices, MNANMEAN(X) is a row vector

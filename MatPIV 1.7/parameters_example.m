@@ -9,7 +9,7 @@ winsize=[64 64;64 64;32 32;32 32]; %interrogation region size
 
 overlap=0.5; % Overlap of interrogation regions
 
-method='multin'; %Method for interrogation (i.e. multiple passes)
+method='single'; %Method for interrogation (i.e. multiple passes)
 
 wocofile='Demo1/worldco.mat'; %file containting the mapping from image to
                           %world coordinates

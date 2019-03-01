@@ -20,7 +20,7 @@ function [R]=submqd(im1,im2,met)
 % Time stamp: June 8 2003 20:07
 
 if nargin==2
-    met='conv'; % Use the convolution-version if not defined
+    met='new'; % Use the correlation-version if not defined
 end 
 
 [ii,jj]=size(im1); [ii2,jj2]=size(im2); 
@@ -88,15 +88,6 @@ switch met
   % Dave Goodmanson, dgoodmanson@worldnet.att.net
   R = conv2(im22.^2,ones(size(im1)),'valid') ...
       -2*conv2(im22,flipud(fliplr(im1)),'valid') ...
-      +sum(sum(im1.^2));
- case 'convpad'
-  R=zeros(size(im1)); 
-  im22=zeros(ii*2,jj*2); im22(ii/2 : 3*ii/2-1, jj/2:3*jj/2-1)=im2;
-  
-  % vectorized contribution by 
-  % Dave Goodmanson, dgoodmanson@worldnet.att.net
-  R = conv2(im22.^2,ones(size(im1)),'full') ...
-      -2*conv2(im22,flipud(fliplr(im1)),'full') ...
       +sum(sum(im1.^2));
   
  case 'fft'

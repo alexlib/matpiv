@@ -7,19 +7,25 @@ function [x,y,u,v,snr,Pkh]=mqd(im1,im2,win,Dt,overlap,ms)
 % This function implements the method by Gui & Merzkirch (2000). 
 %
 % c. 2. August 2000, Kristian Sveen, jks@math.uio,no 
-% for use with MatPIV 1.7
+% for use with MatPIV 1.6
 
-%time stamp: 15. April 2014
+%time stamp: 26. August 2002
 
 % Image read
 if ischar(im1)
-    A=readmyimage(im1);
-    B=readmyimage(im2);
+    [A p1]=imread(im1);
+    [B p2]=imread(im2);
+    if any([isrgb(A), isrgb(B)])
+        A=rgb2gray(A); B=rgb2gray(B);
+    end
+    
+    if ~isempty(p1), A=ind2gray(A,p1); end
+    if ~isempty(p2), B=ind2gray(B,p2); end
 else
     A=im1; B=im2;
 end
 A=double(A); B=double(B);
-sta=dbstack; % to suppress output if called from MATPTV
+[sta,ind]=dbstack; % to suppress output if called from MATPTV
 
 % Precondition added 23. Oct 2002
 %[A,B]=precondition(A,B);
@@ -30,20 +36,17 @@ W=weight('cosn',win,20);
 M=win; N=M; ci1=1; cj1=1;
 x=zeros(ceil((size(A,1)-win)/((1-overlap)*win)), ...
     ceil((size(A,2)-win)/((1-overlap)*win)));
-y=x; u=x; v=x; snr=x; Pkh=x;
+y=x; u=x; v=x; 
 
-if nargin==6, 
-    if ~isempty(ms)
+if nargin==6, if ~isempty(ms)
         IN=zeros(size(ms(1).msk));
-        for i=1:length(ms), IN=IN+double(ms(i).msk); 
-        end
-    else IN=zeros(size(A)); 
-    end, 
-end
+        for i=1:length(ms), IN=IN+double(ms(i).msk); end
+else IN=zeros(size(A)); 
+end, end
 if size(sta,1)<=1  
   disp('* MQD - method')
 else
-  if isempty(strfind(sta(end).name,'matptv')) 
+  if isempty(findstr(sta(end).name,'matptv')) 
     disp('* MQD - method')
   end
 end
@@ -69,11 +72,11 @@ for jj=1:(1-overlap)*win:size(A,1)-win+1
             C=C-mean(C(:)); C=C.*W;
             D=D-mean(D(:)); D=D.*W;
             % perform MQD using the function SUBMQD
-            if isnan(stad1)~=1 && isnan(stad2)~=1
+            if isnan(stad1)~=1 & isnan(stad2)~=1
                 R=submqd(C,D); %/(stad2*stad1);
                 % Locate the lowest point
                 [y1,x1]=find(R==min(min(R(2:end-3,2:end-3))));
-                if size(x1,1)>1 || size(y1,1)>1 
+                if size(x1,1)>1 | size(y1,1)>1 
                     x1=x1(1);
                     y1=y1(1);
                 end
@@ -84,13 +87,10 @@ for jj=1:(1-overlap)*win:size(A,1)-win+1
                 if y1==1, y1=2;	end, if y1==size(R,1), y1=size(R,1)-1; end
                 [x0,y0]=intpeak(x1,y1,R(y1,x1),R(y1,x1-1),R(y1,x1+1),...
                     R(y1-1,x1),R(y1+1,x1),2,win/2);
-                R2=max(R(:))-R; 
-                limx=min([3 (win-x1) (x1-1)]);
-                limy=min([3 (win-y1) (y1-1)]);
+                R2=max(R(:))-R; limx=min([5 (win-x1) (x1-1)]);limy=min([5 (win-y1) (y1-1)]);
                 R2(y1-limy:y1+limy,x1-limx:x1+limx)=NaN;
-                R2=R2(~isnan(R2(2:end-3,2:end-3)));
-                [p2_y2,p2_x2]=find(R2==max(R2(:)));
-                if size(p2_y2,1)>1 || size(p2_x2,1)>1 
+                [p2_y2,p2_x2]=find(R2==max(max(R2(2:end-3,2:end-3))));
+                if size(p2_y2,1)>1 | size(p2_x2,1)>1 
                     p2_y2=p2_y2(1);
                     p2_x2=p2_x2(1);
                 end
@@ -123,7 +123,7 @@ for jj=1:(1-overlap)*win:size(A,1)-win+1
       fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
       fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
     else
-      if isempty(strfind(sta(end).name,'matptv'))   
+      if isempty(findstr(sta(end).name,'matptv'))   
 	fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
 	fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
       end
@@ -135,7 +135,7 @@ end
 if size(sta,1)<=1  
   fprintf('.\n');
 else
-  if isempty(strfind(sta(end).name,'matptv')) 
+  if isempty(findstr(sta(end).name,'matptv')) 
       fprintf('.\n');
   end
 end
