@@ -16,6 +16,7 @@ function [particles]=matptv(setfile)
 if nargin<1, disp('please specify settings-file'); return,
 else
     eval(setfile)
+    
     if ischar(ims)
         if strcmp(ims(end-3:end),'.avi'),
             ims=aviread(ims,aviframeno);
@@ -45,9 +46,9 @@ for i=1:size(ims,2)
         %now run through all threshold levels for this image
         if th==length(thr)
             clear blobs
-            blobs=blobrec(ims(i).cdata,thr(th),pproperties);
+            blobs=blobrec(ims(i).cdata,thr(th),props);
         else
-            blobs=blobrec(ims(i).cdata,thr(th),pproperties,blobs,maxdist,edgedist);
+            blobs=blobrec(ims(i).cdata,thr(th),props,blobs,maxdist,edgedist);
         end
         particles(i).t=(i-1)*dt;
         particles(i).blobs=blobs;

@@ -121,7 +121,7 @@ elseif strcmp(method,'norm')==1
     [x,y,u,v,SnR,Pkh,u2,v2]=normpass(im1,im2,winsize,Dt,overlap,ms);
 elseif strcmp(method,'phase')==1
     [x,y,u,v,SnR,Pkh]=pcorrpass(im1,im2,winsize,Dt,overlap,ms);
-elseif ~isempty(strfind(method,'multi')) %~=0
+elseif contains(method,'multi') %~=0
     % first check if windows have been given explicitly
     % need to make sure we have two iterations on final level, unless
     % we are using the multinfft option which iterates locally for each
@@ -188,8 +188,8 @@ if nargin>6 || nargin==1
         if size(D,1)==1
             mapp=load(D(1).name);
             disp(['Warning! Using ',mappingfunc ,' transform from pixels to world coordinates'])
-            [xw,yw,uw,vw]=pixel2world2(u,v,x,y,wocofile,mappingfunc);
-            %[xw,yw,uw,vw]=pixel2world(u,v,x,y,mapp.comap(:,1),mapp.comap(:,2));
+            % [xw,yw,uw,vw]=pixel2world2(u,v,x,y,wocofile,mappingfunc);
+            [xw,yw,uw,vw]=pixel2world(u,v,x,y,mapp.comap(:,1),mapp.comap(:,2));
         else
             disp('No such world coordinate file present!')
             xw=x; yw=y;

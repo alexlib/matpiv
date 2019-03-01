@@ -21,8 +21,8 @@ cj=1;
 [sy,sx]=size(A);
 
 % Allocate space for matrixes
-xp=zeros(ceil((size(A,1)-N)/((1-ol)*N))+1, ...
-    ceil((size(A,2)-M)/((1-ol)*M))+1);
+xp=zeros(floor((size(A,1)-N)/((1-ol)*N))+1, ...
+    floor((size(A,2)-M)/((1-ol)*M))+1);
 yp=xp; up=xp; vp=xp; brc=xp; SnR=xp; Pkh=xp;
 
 % Variables used for subpixel displacement in Fourier Domain
@@ -36,14 +36,15 @@ J=(1:2*N)'; J(J>N)=J(J>N)-2*N; J=repmat(J,1,2*M);
 W=weight('cosn',[M,N],20); % weights used in the sub-pixel window shift
 %W2=1-weight('cosn',2*[M N],20); %weight for FFT filtering
 
-if nargin==8, 
+if nargin==8
     if ~isempty(maske)
         IN=zeros(size(maske(1).msk));
         for ii=1:length(maske)
             IN=IN+double(maske(ii).msk);
         end
-    else IN=zeros(size(A)); 
-    end, 
+    else
+        IN=zeros(size(A));
+    end
 end
 
 fprintf([' Continuous windows shifting in Fourier space\n', ...
@@ -82,22 +83,26 @@ for jj=1:((1-ol)*N):sy-N+1
             % use weights
             E=(E-mean(E(:))).*W;
             F=(D2-mean(D2(:))).*W;
-            E=E-mean(E(:));
-            F=F-mean(F(:));
+            %             E=E-mean(E(:));
+            %             F=F-mean(F(:));
             
             % take zero-padded Fourier Transform
             mf = 2^nextpow2(M+N);
             nf = mf;
             at = fft2(E,nf,mf);
-            bt = fft2(conj(F(end:-1:1,end:-1:1)),nf,mf);
+            bt = fft2(F(end:-1:1,end:-1:1),nf,mf);
             %no zero-padding version - need to change I and J if this
             %is uncommented
             %at = fft2(E);
             %bt = fft2(F);
             %%%%%%%%%%%%%%%%%%%%%% Calculate the normalized correlation:
-            R=real(ifft2(bt.*at));
+            R = ifft2(bt.*at);
             R(end,:)=[]; R(:,end)=[];
             R=real(R)./(N*M*stad1*stad2);
+            
+            %  R = xcorrf2(E,F)./(N*M*stad1*stad2);
+            
+            
             %%%%%%%%%%%%%%%%%%%%%% Find the position of the maximal value of R
             %%%%%%%%%%%%%%%%%%%%%% _IF_ the standard deviation is NOT NaN.
             if all(~isnan(R(:))) && ~all(R(:)==0)  %~isnan(stad1) & ~isnan(stad2)
@@ -122,11 +127,16 @@ for jj=1:((1-ol)*N):sy-N+1
                         jj+sty>0 && ii+stx>0 && ii+M-1+stx<=sx && jj+N-1+sty<=sy
                     D2=B(jj+sty:jj+N-1+sty,...
                         ii+stx:ii+M-1+stx);
-                    F=(D2-mean(D2(:))).*W; F=F-mean(F(:));
-                    bt = fft2(conj(F(end:-1:1,end:-1:1)),nf,mf);
-                    R=ifft2(bt.*at);
+                    
+                    F=(D2-mean(D2(:))).*W;
+                    % F=F-mean(F(:));
+                    
+                    bt = fft2(F(end:-1:1,end:-1:1),nf,mf);
+                    
+                    R = ifft2(bt.*at);
                     R(end,:)=[]; R(:,end)=[];
-                    R=real(R)./(N*M*stad1*stad2);
+                    R = real(R)./(N*M*stad1*stad2);
+                    
                     [max_y1,max_x1]=find(R==max(R(:)));
                     stx=stx + (M-max_x1);
                     sty=sty + (N-max_y1);
@@ -137,7 +147,7 @@ for jj=1:((1-ol)*N):sy-N+1
                 if breakoutcounter~=max_iterations
                     %update these only IF convergence was met, that is, we
                     %used less than max_iterations
-                    idx(cj,ci)=stx; idy(cj,ci)=sty; 
+                    idx(cj,ci)=stx; idy(cj,ci)=sty;
                     breakoutcounter=1; % only reset if converged
                 end
                 
@@ -146,13 +156,15 @@ for jj=1:((1-ol)*N):sy-N+1
                 if max_x1~=1 && max_y1~=1 && max_x1~=M-1 && max_y1~=N-1
                     % 3-point peak fit using centroid, gaussian (default)
                     % or parabolic fit
-                    [x0 y0]=intpeak(max_x1,max_y1,R(max_y1,max_x1),...
+                    [x0, y0]=intpeak(max_x1,max_y1,R(max_y1,max_x1),...
                         R(max_y1,max_x1-1),R(max_y1,max_x1+1),...
-                        R(max_y1-1,max_x1),R(max_y1+1,max_x1),2,[M,N]);
+                        R(max_y1-1,max_x1),R(max_y1+1,max_x1),1,[M,N]);
+                    
+                    % [x0,y0]=intpeak(x2,y2,R(y2,x2),R(y2,x2-1),R(y2,x2+1),R(y2-1,x2),R(y2+1,x2),1,winsize);
                     X0=x0; Y0=y0;
                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     % here we do the subpixel shifts in Fourier space
-                    while (abs(x0)>min_res || abs(y0)>min_res) &&...
+                    while (abs(x0)>min_res || abs(y0)>min_res) && ...
                             breakoutcounter<max_iterations
                         bt2=(exp(2*1i*pi*( (I*(X0)/size(I,2)) + ...
                             (J*(Y0)/size(J,1))))).*bt;
@@ -170,7 +182,7 @@ for jj=1:((1-ol)*N):sy-N+1
                         R=real(R)./(N*M*stad1*stad2);
                         
                         [dy,dx]=find(R==max(R(:)));
-                        X0=X0+(M-dx); Y0=Y0+(N -dy);
+                        X0=X0+(M-dx); Y0=Y0+(N-dy);
                         if dx>1 && dx<2*M-1 && dy>1 && dy<2*N-1
                             %only gaussian fit here
                             x0= -(log(R(dy,dx-1))-log(R(dy,dx+1)))/...
@@ -189,7 +201,7 @@ for jj=1:((1-ol)*N):sy-N+1
                             breakoutcounter=16;
                         end
                     end
-                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%              
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     % Find the signal to Noise ratio
                     R2=R;
                     try
@@ -198,7 +210,7 @@ for jj=1:((1-ol)*N):sy-N+1
                         R2(max_y1-1:max_y1+1,max_x1-1:max_x1+1)=NaN;
                     end
                     if size(R,1)==(N-1)
-                        [p2_y2,p2_x2]=find(R2==max(R2(:)));                        
+                        [p2_y2,p2_x2]=find(R2==max(R2(:)));
                     else
                         [p2_y2,p2_x2]=find(R2==max(max(R2(0.5*N:1.5*N-1,0.5*M:1.5*M-1))));
                     end
@@ -219,17 +231,24 @@ for jj=1:((1-ol)*N):sy-N+1
                     %%%%%%%%%%%%%%%%%%%%%% Store the displacements, SnR and Peak Height.
                     up(cj,ci)=(-X0+idx(cj,ci))/Dt;
                     vp(cj,ci)=(-Y0+idy(cj,ci))/Dt;
+                    % if ~isreal(vp); keyboard; end
                     xp(cj,ci)=(ii+(M/2)-1);
                     yp(cj,ci)=(jj+(N/2)-1);
                     SnR(cj,ci)=snr;
                     Pkh(cj,ci)=R(max_y1,max_x1);
                 else
-                    up(cj,ci)=NaN; vp(cj,ci)=NaN; SnR(cj,ci)=NaN; Pkh(cj,ci)=0;
+                    up(cj,ci)=NaN;
+                    vp(cj,ci)=NaN;
+                    SnR(cj,ci)=NaN;
+                    Pkh(cj,ci)=0;
                     xp(cj,ci)=(ii+(M/2)-1);
                     yp(cj,ci)=(jj+(N/2)-1);
                 end
             else
-                up(cj,ci)=NaN; vp(cj,ci)=NaN; SnR(cj,ci)=NaN; Pkh(cj,ci)=0;
+                up(cj,ci)=NaN;
+                vp(cj,ci)=NaN;
+                SnR(cj,ci)=NaN;
+                Pkh(cj,ci)=0;
                 xp(cj,ci)=(ii+(M/2)-1);
                 yp(cj,ci)=(jj+(N/2)-1);
             end
@@ -237,8 +256,11 @@ for jj=1:((1-ol)*N):sy-N+1
         else
             xp(cj,ci)=(M/2)+ii-1;
             yp(cj,ci)=(N/2)+jj-1;
-            up(cj,ci)=NaN; vp(cj,ci)=NaN;
-            SnR(cj,ci)=NaN; Pkh(cj,ci)=NaN;ci=ci+1;
+            up(cj,ci)=NaN;
+            vp(cj,ci)=NaN;
+            SnR(cj,ci)=NaN;
+            Pkh(cj,ci)=NaN;
+            ci=ci+1;
         end
         brc(cj,ci)=breakoutcounter;
     end

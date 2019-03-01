@@ -19,17 +19,18 @@ cj=1;
 [sy,sx]=size(A);
 
 % Allocate space for matrixes
-xp=zeros(ceil((size(A,1)-N)/((1-ol)*N))+1, ...
-    ceil((size(A,2)-M)/((1-ol)*M))+1);
+xp=zeros(floor((size(A,1)-N)/((1-ol)*N))+1, ...
+    floor((size(A,2)-M)/((1-ol)*M))+1);
 yp=xp; up=xp; vp=xp; SnR=xp; Pkh=xp;
 
-if nargin==8, 
+if nargin==8 
     if ~isempty(maske)
         IN=zeros(size(maske(1).msk));
         for i=1:length(maske)
-            IN=IN+double(maske(i).msk);
+            IN = IN+double(maske(i).msk);
         end
-    else IN=zeros(size(A)); 
+    else
+        IN = zeros(size(A));
     end
 end
 
@@ -88,7 +89,7 @@ for jj=1:((1-ol)*N):sy-N+1
                 
                 % 3-point peak fit using centroid, gaussian (default)
                 % or parabolic fit
-                [x0 y0]=intpeak(max_x1,max_y1,R(max_y1,max_x1),...
+                [x0, y0]=intpeak(max_x1,max_y1,R(max_y1,max_x1),...
                     R(max_y1,max_x1-1),R(max_y1,max_x1+1),...
                     R(max_y1-1,max_x1),R(max_y1+1,max_x1),2,[M,N]);
                 
@@ -172,13 +173,13 @@ end
 [mb,nb] = size(b);
 %       make reverse conjugate of one array
 b = conj(b(mb:-1:1,nb:-1:1));
-if strcmp(pad,'yes');
+if strcmp(pad,'yes')
     %       use power of 2 transform lengths
     mf = 2^nextpow2(ma+mb);
     nf = 2^nextpow2(na+nb);
     at = fft2(b,mf,nf);
     bt = fft2(a,mf,nf);
-elseif strcmp(pad,'no');
+elseif strcmp(pad,'no')
     at = fft2(b);
     bt = fft2(a);
 else
@@ -190,11 +191,11 @@ c = ifft2(at.*bt);
 if ~any(any(imag(a))) && ~any(any(imag(b)))
     c = real(c);
 end
-if strcmp(pad,'yes');
+if strcmp(pad,'yes')
     %  trim to standard size
     c(ma+mb:mf,:) = [];
     c(:,na+nb:nf) = [];
-elseif strcmp(pad,'no');
+elseif strcmp(pad,'no')
     c=(c(1:end-1,1:end-1));
     
     %    c(ma+mb:mf,:) = [];

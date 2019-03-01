@@ -126,15 +126,15 @@ for jj=1:(1-overlap)*winsize:size(A,1)-winsize+1
         
     end
     % Display calculation time
-    if size(sta,1)<=1
-        fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
-        fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
-    else
-        if isempty(strfind(sta(end).name,'matptv'))
-            fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
-            fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
-        end
-    end
+%     if size(sta,1)<=1
+%         fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
+%         fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
+%     else
+%         if isempty(strfind(sta(end).name,'matptv'))
+%             fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
+%             fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
+%         end
+%     end
     
     ci1=1;
     cj1=cj1+1;
@@ -147,40 +147,3 @@ else
         fprintf('.\n');
     end
 end
-
-% now we inline the function XCORRF2 to shave off some time.
-
-function c = xcorrf2(a,b)
-%  c = xcorrf2(a,b)
-%   Two-dimensional cross-correlation using Fourier transforms.
-%       XCORRF2(A,B) computes the crosscorrelation of matrices A and B.
-%       XCORRF2(A) is the autocorrelation function.
-%       This routine is functionally equivalent to xcorr2 but usually faster.
-%       See also XCORR2.
-
-%       Author(s): R. Johnson
-%       $Revision: 1.0 $  $Date: 1995/11/27 $
-
-[ma,na] = size(a);
-% if nargin == 1
-%     %       for autocorrelation
-%     b = a;
-% end
-[mb,nb] = size(b);
-%       make reverse conjugate of one array
-b = conj(b(mb:-1:1,nb:-1:1));
-
-%       use power of 2 transform lengths
-mf = 2^nextpow2(ma+mb);
-nf = 2^nextpow2(na+nb);
-at = fft2(b,mf,nf);
-bt = fft2(a,mf,nf);
-%       multiply transforms then inverse transform
-c = ifft2(at.*bt);
-%       make real output for real input
-if ~any(any(imag(a))) && ~any(any(imag(b)))
-    c = real(c);
-end
-%  trim to standard size
-c(ma+mb:mf,:) = [];
-c(:,na+nb:nf) = [];

@@ -7,8 +7,8 @@ sthr=1.2;
 gthr=1;
 lthr=2.5;
 
-[x1,y1,u1,v1,snr1,pkh1]=matpiv(im1,im2,win,0.001,ol,...
-'phase','worldco2.mat','polymask2.mat');
+% [x1,y1,u1,v1,snr1,pkh1]=matpiv(im1,im2,win,0.001,ol,...
+% 'phase','worldco2.mat','polymask2.mat');
 [x2,y2,u2,v2,snr2,pkh2]=matpiv(im1,im2,win,0.001,ol,...
 'single','worldco2.mat','polymask2.mat');
 [x3,y3,u3,v3,snr3,pkh3]=matpiv(im1,im2,win,0.001,ol,...
@@ -19,10 +19,10 @@ lthr=2.5;
 %scale=3/nanmax(sqrt(u1(:).^2 + v1(:).^2));
 
 
-[su,sv]=snrfilt(x1,y1,u1,v1,snr1,sthr);
-[su,sv]=globfilt(x1,y1,su,sv,gthr);
-[su1,sv1]=localfilt(x1,y1,su,sv,lthr,'median');
-[fu1,fv1]=naninterp(su1,sv1,'linear','polymask2.mat',x1,y1);
+% [su,sv]=snrfilt(x1,y1,u1,v1,snr1,sthr);
+% [su,sv]=globfilt(x1,y1,su,sv,gthr);
+% [su1,sv1]=localfilt(x1,y1,su,sv,lthr,'median');
+% [fu1,fv1]=naninterp(su1,sv1,'linear','polymask2.mat',x1,y1);
 
 [su,sv]=snrfilt(x2,y2,u2,v2,snr2,sthr);
 [su,sv]=globfilt(x2,y2,su,sv,gthr);

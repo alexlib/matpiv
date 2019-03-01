@@ -48,7 +48,9 @@ else
 end
 %b=im2bw(a,thr);     
 b=(a > 255*thr); % this is essentially what im2bw does
-l = bwlabel(b,4);
+b = imcomplement(b); % alex - shadow
+% b = (a > 200 & a < 216);
+l = logical(b,4);
 %b(b==0)=nan;
 %l=label(b,4);
 
@@ -56,6 +58,8 @@ l = bwlabel(b,4);
 %(on Jan30 2004)
 stats2 = regionprops(l,'basic'); %toc
 %stats2 = imfeature(l,'basic');
+
+stats2 = stats2(2:end); % alex - remove the background
 
 area=cat(1,stats2.Area);
 centr=cat(1,stats2.Centroid);
