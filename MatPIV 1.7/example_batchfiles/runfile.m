@@ -21,13 +21,8 @@ function [outvec]=runfile(varargin)
 %
 % Edit this file to change all the settings.
 %
-
-% Additions to original file:
-%
-% 5/12-05 - corrections, bugfix and changes by Maxim Belkin <mbelkin@anl.gov>
-
 if ~isempty(varargin)
-  basename=varargin{1};
+  basename=varargin(1);
 else
   disp('Please give the base of the filenames you wish to process!')
   return
@@ -52,12 +47,18 @@ names=sortrows(char(names{:}));
 numoffiles = max(str2num(names(:,end-7:end-5)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%		     
 % Main loop
-for i=0:numoffiles
-  imnum=num2str(i,'%03d');
+for i=1:numoffiles+1
+  if i<10
+    imnum=['00',num2str(i-1)]; % remember that images start
+  elseif i<100 & i>=10         % to count from 000 not 001
+    imnum=['0',num2str(i-1)];
+  elseif i<1000 & i>=100
+    imnum=num2str(i);
+  end
   im1=['ima',num2str(imnum),'b.bmp'];
   im2=['ima',num2str(imnum),'c.bmp'];
-  eval(['[x,y,u',num2str(i),...
-	',v',num2str(i),',snr',num2str(i),...
+  eval(['[x',num2str(i),'y',num2str(i),'u',num2str(i),...
+	'v',num2str(i),'snr',num2str(i),...
 	']=matpiv(im1,im2,64,T,0.5,met,woco);'])
 end	
 if nargout==0
@@ -67,17 +68,17 @@ end
 % Filtering
 for i=1:numoffiles
 % SnR filter:
-  eval(['[su',num2str(i),',sv',num2str(i),...
-	']=snrfilt(x,y,u',num2str(i),...
-	',v',num2str(i),',snr',num2str(i),',snrtrld,int);'])
+  eval(['[su',num2str(i),'sv',num2str(i),...
+	']=snrfilt(x',num2str(i),'y',num2str(i),'u',num2str(i),...
+	'v',num2str(i),'snr',num2str(i),'snrtrld,int);'])
 % global filter:
-  eval(['[gu',num2str(i),',gv',num2str(i),...
-	']=globfilt(x,y,su',num2str(i),...
-	',sv',num2str(i),',globtrld,int);'])
+  eval(['[gu',num2str(i),'gv',num2str(i),...
+	']=globfilt(x',num2str(i),'y',num2str(i),'su',num2str(i),...
+	'sv',num2str(i),',globtrld,int);'])
 % local median filter:
   eval(['[fu',num2str(i),'fv',num2str(i),...
-	']=localfilt(x,y,gu',num2str(i),...
-	',gv',num2str(i),',loctrld,med,int);'])
+	']=localfilt(x',num2str(i),'y',num2str(i),'gu',num2str(i),...
+	'gv',num2str(i),'loctrld,med,int);'])
   outvec{i}.x=eval(['[x',num2str(i),'];'])
   outvec{i}.y=eval(['[y',num2str(i),'];'])
   outvec{i}.u=eval(['[u',num2str(i),'];'])

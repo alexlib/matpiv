@@ -20,17 +20,18 @@ function [maske,x,y,u,v]=mask2(ima,wocofile,x,y,u,v)
 % velocity vectors will have to be masked manually using the IDXW
 % and IDYW vectors (which define the polygon) and the file MASKPOLYG.
 %
-% See also ROIPOLY, MATPIV, DEFINEWOCO, MASKPOLYG, MASK
+% See also ROIPOLY, MATPIV, DEFINEWOCO, MASKPOLYG
 
-% for use with MATPIV 1.6.2
+% MASK Beta version Feb 1 2001 
+% for use with MATPIV 1.6
 %
-% Copyright 2000-2005 J.K. Sveen, jks@math.uio.no
+% Copyright 2000-2001 J.K. Sveen, jks@math.uio.no
 % Mechanics Division, Depth of Mathematics
 % University of Oslo, Norway
 %
 % Distributed under the terms of the GNU General Public License
 %
-% Timestamp: 13:15, 10 June 2005
+% Timestamp: 10:59, 17 Jan 2002
 
   A=imread(ima);
   [sx,sy]=size(A);
@@ -38,7 +39,7 @@ function [maske,x,y,u,v]=mask2(ima,wocofile,x,y,u,v)
   Ay=repmat([1:size(A,1)]',1,size(A,2));
   inp=1;
   tel=1;
-  imagesc(A)
+  imshow(A)
   hold on
   while inp==1,
       disp('Mark your polygon points with the left mouse button.')
@@ -55,7 +56,7 @@ function [maske,x,y,u,v]=mask2(ima,wocofile,x,y,u,v)
       tel=tel+1;
   end
   
-  clf, imagesc(A), hold on
+  clf, imshow(A), hold on
   for i=1:length(maske)
       [py,px]=find(maske(i).msk==1);
       h1=plot(px(1:6:end),py(1:6:end),'.r');

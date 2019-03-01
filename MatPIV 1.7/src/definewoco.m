@@ -1,4 +1,4 @@
-function [comap,A1,world,button]=definewoco(filename,typ)
+function [comap,A1,world]=definewoco(filename,typ)
 % DEFINEWOCO - calculate the mapping from image to physical coordinates in MatPIV
 %
 % [comap,A1,world]=definewoco(image,coordinatestyle)
@@ -47,10 +47,10 @@ function [comap,A1,world,button]=definewoco(filename,typ)
 % is not the case just press <enter> when asked for a number. The file will 
 % then be named 'worldco.mat'
 %
-% See also: MATPIV, PIXEL2WORLD
+% See also: MATPIV
 
 
-% Copyright, J. Kristian Sveen, 1999-2004, last revision March 17, 2005
+% Copyright, J. Kristian Sveen, 1999-2004, last revision April 16, 2004
 %             jks@math.uio.no
 % For use with MatPIV 1.6.1
 % Distributed under the GNU general public license
@@ -61,21 +61,14 @@ if ischar(filename)
 else
   A=filename;
 end
-if misrgb(A), A=double(mrgb2gray(A)); else, A=double(A); end
+if isrgb(A), A=double(rgb2gray(A)); else, A=double(A); end
 [ay,ax]=size(A);
-
-%invert the image in case dots are black on white background
-if mean(A(:))/max(A(:))>0.5
-  que=input(['Is your image inverted (i.e black dots or squares on', ...
-	    ' white background) [y/N]: '],'s');
-  if isempty(que), que='N'; end
-  if strcmp(que,'y') | strcmp(que,'Y')
-    A=max(A(:))-A;
-  end
-end
 
 my_ver=version;
 my_ver=str2num(my_ver(1:3));
+% if my_ver>=6.5, 
+%     pixval on
+% end
 
 if strcmp(typ,'+')==1
   load articross.mat
@@ -120,18 +113,12 @@ else
 end
 figure
 imagesc(A)
-%this does not seem to work with mginput:
-%if my_ver>=6.5 & exist('pixval','file')==2, pixval on, end
 usr1=1;
 
 disp('Please mark your world coordinate points with left mouse button.');
 disp('Press ENTER when finished!')
 
-[x1,y1,button]=mginput;
-% fix to cure the following problem:
-% http://www.mathworks.com/support/solutions/data/1-PJ6FX.html?solution=1-PJ6FX
-%input('');
-%
+[x1,y1]=mginput;
 x1=round(x1); y1=round(y1);
 for i=1:1:size(x1,1)
     if y1(i)-9<1, edgy1=(y1(i)-9)-1; else edgy1=0; end
@@ -165,20 +152,10 @@ end
 % Construct function for fitting.
 inpx='inne';
 while strcmp(inpx,'inne')
-  mapfun=input('Mapping function. (B)ilinear, (N)onlinear or (L)inear (B/b/N/n/L/l): ','s');
+  mapfun=input('Mapping function. (N)onlinear or (L)inear (N/n/L/l): ','s');
   if strcmp(mapfun,'N')==1 | strcmp(mapfun,'n')==1
     if length(world)>=6
       A1=[ones(size(x,2),1) x.' y.' (x.*y).' (x.^2).' (y.^2).'];
-      inpx='ute';
-    else
-      disp('Not enough points specified to calculate nonlinear mapping factors.')
-      disp('Using linear mapping function.');
-      A1=[ones(size(x,2),1) x.' y.']; 
-      inpx='ute';
-    end
-elseif strcmp(mapfun,'B')==1 | strcmp(mapfun,'b')==1
-    if length(world)>=6
-      A1=[ones(size(x,2),1) x.' y.' (x.*y).'];
       inpx='ute';
     else
       disp('Not enough points specified to calculate nonlinear mapping factors.')

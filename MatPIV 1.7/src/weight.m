@@ -43,7 +43,7 @@ end
 switch lower(func)
  case 'gaussian'
   hsize=[N,n];
-  hsize=(hsize-1)/2 ;
+  hsize=(hsize-1)/2 
   [x,y] = meshgrid(-hsize(2):hsize(2),-hsize(1):hsize(1));
   x=x./(max(x(:))); y=y./(max(y(:))); %normalize so that -1<= x,y <=1
   w= exp( -( (x.*x)./(dev^2) + (y.*y)./(dev^2) ));

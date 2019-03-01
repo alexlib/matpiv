@@ -136,7 +136,7 @@ if strcmp(var3,'test')
     oldm.maske=maske;
   end
 
-  %%%%%%%%%%%%%%%%%%%%%%There's an error in this part somewhere...
+  %%%%%%%%%%%%%%%%%%%%%%HER er feilen
   if length(maske.idy)~=length(oldm.maske.idy)
     %    maske.idy(1:2)=
     %    oldm.maske.idy(3:length(maske.idy)-1)

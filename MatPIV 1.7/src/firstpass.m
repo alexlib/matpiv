@@ -1,31 +1,31 @@
-function [xx,yy,datax,datay]=firstpass(A,B,N,ol,idx,idy,maske)
+function [xx,yy,datax,datay]=firstpass(A,B,N,ol,counter,idx,idy,maske)
 
-% function [x,y,datax,datay]=firstpass(A,B,M,ol,idx,idy,maske)
+% function [x,y,datax,datay]=firstpass(A,B,M,N,ol,counter,idx,idy,maske)
 %
 % This function is used in conjunction with the MULTIPASS.M run-file.
 % Inputs are allocated from within MULTIPASS.
 
-% 1999 - 2005, J. Kristian Sveen (jks@math.uio.no)
+% 1999 - 2001, J. Kristian Sveen (jks@math.uio.no)
 % For use with MatPIV 1.5, Copyright
 % Distributed under the terms of the GNU - GPL license
-% timestamp: 14.41, 24 Mar 2005
+% timestamp: 21.20, 20 Feb 2001
 
 if length(N)==1
-    M=N;
+    M=N;winsize=[M N]; 
 elseif length(N)==2
-    M=N(1); N=N(2); 
+    M=N(1); N=N(2); winsize=[M N]; 
 end
 overlap=ol; [sy,sx]=size(A);
-if nargin < 6 || isempty(idx) || isempty(idy)
+if nargin < 6 | isempty(idx) | isempty(idy)
     idx=zeros(floor(sy/(N*(1-ol))),floor(sx/(M*(1-ol))));
     idy=zeros(floor(sy/(N*(1-ol))),floor(sx/(M*(1-ol))));
 end
-xx=zeros(ceil((size(A,1)-N)/((1-overlap)*N))+1, ...
+x=zeros(ceil((size(A,1)-N)/((1-overlap)*N))+1, ...
     ceil((size(A,2)-M)/((1-overlap)*M)) +1);
-yy=xx; datax=xx; datay=xx; 
+y=x; u=x; v=x; 
 % change . october 2001, weight matrix added.
 % W=weight('cosn',[M N],100);
-if nargin==7, 
+if nargin==8, 
     if ~isempty(maske)
         IN=zeros(size(maske(1).msk));
         for i=1:length(maske)
@@ -87,8 +87,8 @@ for jj=1:((1-ol)*N):sy-N+1
             end
             
             if length(max_x1)>1
-              max_x1=round(sum(max_x1.*(1:length(max_x1))')./sum(max_x1));
-              max_y1=round(sum(max_y1.*(1:length(max_y1))')./sum(max_y1));
+              max_x1=round(sum(max_x1.*([1:length(max_x1)]'))./sum(max_x1));
+              max_y1=round(sum(max_y1.*([1:length(max_y1)]'))./sum(max_y1));
             elseif isempty(max_x1)
               idx(cj,ci)=nan; idy(cj,ci)=nan; max_x1=nan; max_y1=nan;
             end
@@ -150,7 +150,7 @@ function c = xcorrf2(a,b,pad)
   %       multiply transforms then inverse transform
   c = ifft2(at.*bt);
   %       make real output for real input
-  if ~any(any(imag(a))) && ~any(any(imag(b)))
+  if ~any(any(imag(a))) & ~any(any(imag(b)))
     c = real(c);
   end
   if strcmp(pad,'yes');

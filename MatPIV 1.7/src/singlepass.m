@@ -11,47 +11,49 @@ function [x,y,u,v,SnR,Pkh,u2]=singlepass(im1,im2,winsize,Dt,overlap,maske)
 %LOCALFILT
 
 
-% Copyright 1998-2000, Kristian Sveen, jks@math.uio.no
+% Copyright 1998-2000, Kristian Sveen, jks@math.uio.no 
 % for use with MatPIV 1.6.1
 % Distributed under the terms of the Gnu General Public License
 % Time stamp: 10:47, Jun 03 2004
 
 % Image read
 if ischar(im1)
-    A=readmyimage(im1); B=readmyimage(im2);
+    [A p1]=imread(im1);    [B p2]=imread(im2);
+    if any([isrgb(A), isrgb(B)])
+        A=rgb2gray(A); B=rgb2gray(B);
+    end   
+    if ~isempty(p1), A=ind2gray(A,p1); end
+    if ~isempty(p2), B=ind2gray(B,p2); end
 else
     A=im1; B=im2;
-end
-sta=dbstack; % to suppress output if called from MATPTV
+end   
+[sta,ind]=dbstack; % to suppress output if called from MATPTV
 A=double(A); B=double(B);
-
+%A=double(imread(im1)); B=double(imread(im2));
 % Various declarations
-M=winsize; N=M; cj1=1; ci1=1;
+M=winsize; N=M; ci1=1; cj1=1;
 x=zeros(ceil((size(A,1)-winsize)/((1-overlap)*winsize)), ...
     ceil((size(A,2)-winsize)/((1-overlap)*winsize)));
-y=x; u=x; v=x; SnR=x; Pkh=x; u2=x;
-%dumx=ones(size(A,1),1) * ([1:size(A,2)]);
-%dumy=([1:size(A,1)].') * ones(1,size(A,2));
-if nargin==6,
-    if ~isempty(maske)
+y=x; u=x; v=x; 
+dumx=ones(size(A,1),1) * ([1:size(A,2)]);
+dumy=([1:size(A,1)].') * ones(1,size(A,2));
+if nargin==6, if ~isempty(maske)
         IN=zeros(size(maske(1).msk));
         for i=1:length(maske)
             IN=IN+double(maske(i).msk);
         end
-    else IN=zeros(size(A));
-    end,
-end
+    else IN=zeros(size(A)); end, end
 % Create bias correction matrix
 BiCor=xcorrf2(ones(winsize),ones(winsize))/(winsize*winsize);
 % change 4. october 2001, weight matrix added.
-W=weight('cosn',winsize,20);
+W=weight('cosn',winsize,20); 
 %t0=clock;
-if size(sta,1)<=1
-    disp('* Single pass')
+if size(sta,1)<=1  
+  disp('* Single pass')
 else
-    if isempty(strfind(sta(end).name,'matptv'))
-        disp('* Single pass')
-    end
+  if isempty(findstr(sta(end).name,'matptv')) 
+    disp('* Single pass')
+  end
 end
 SA=std(A(:));
 
@@ -69,35 +71,35 @@ for jj=1:(1-overlap)*winsize:size(A,1)-winsize+1
             % Subtract the mean of each window to avoid correlation of
             % the mean background intensities.
             C=C-mean(C(:));
-            D=D-mean(D(:));
+            D=D-mean(D(:)); 
             % uncomment below to use weighting
             C=C.*W; D=D.*W;
-            
-            % Calculate the correlation using the xcorrf2 (found at the
-            % Mathworks web site). Divide by N (winsize) and the stad's
+
+            % Calculate the correlation using the xcorrf2 (found at the 
+            % Mathworks web site). Divide by N (winsize) and the stad's 
             % to normalize the peakheights.
-            if isnan(stad1)~=1 && isnan(stad2)~=1
+            if isnan(stad1)~=1 & isnan(stad2)~=1
                 R=xcorrf2(C,D)./(winsize*winsize*stad1*stad2);
                 % Correct for displacement bias
-                R=R./BiCor;
-                % Locate the highest point
+                R=R./BiCor;    
+                % Locate the highest point   
                 [y1,x1]=find(R==max(max(R(0.5*winsize+2:1.5*winsize-3,...
                     0.5*winsize+2:1.5*winsize-3))));
-                if size(x1,1)>1 || size(y1,1)>1
-                    x1=round(sum(x1.*(1:length(x1))')./sum(x1));
-                    y1=round(sum(y1.*(1:length(y1))')./sum(y1));
-                end
+                if size(x1,1)>1 | size(y1,1)>1 
+		  x1=round(sum(x1.*([1:length(x1)]'))./sum(x1));
+		  y1=round(sum(y1.*([1:length(y1)]'))./sum(y1));
+		end
                 % Interpolate to find the peak position at subpixel resolution,
                 % using three point curve fit function INTPEAK.
                 % X0,Y0 now denotes the displacements.
                 [x0,y0]=intpeak(x1,y1,R(y1,x1),R(y1,x1-1),R(y1,x1+1),...
-                    R(y1-1,x1),R(y1+1,x1),2,winsize);
+				R(y1-1,x1),R(y1+1,x1),2,winsize);
                 R2=R;
                 R2(y1-3:y1+3,x1-3:x1+3)=NaN;
                 [p2_y2,p2_x2]=find(R2==max(max(R2( 0.5*N+2:1.5*N-3,0.5*M+2:1.5*M-3))));
                 if length(p2_x2)>1
-                    p2_x2=p2_x2(round(length(p2_x2)/2));
-                    p2_y2=p2_y2(round(length(p2_y2)/2));
+                    p2_x2=p2_x2(round(length(p2_x2)/2)); 
+                    p2_y2=p2_y2(round(length(p2_y2)/2)); 
                 end
                 % Store the data
                 x(cj1,ci1)=(winsize/2)+ii-1;
@@ -106,7 +108,7 @@ for jj=1:(1-overlap)*winsize:size(A,1)-winsize+1
                 v(cj1,ci1)=-y0/Dt;
                 SnR(cj1,ci1)=R(y1,x1)/R2(p2_y2,p2_x2);
                 Pkh(cj1,ci1)=R(y1,x1);
-                u2(cj1,ci1)=sum(R(:));
+		u2(cj1,ci1)=sum(R(:));
             else
                 u(cj1,ci1)=NaN; v(cj1,ci1)=NaN; SnR(cj1,ci1)=NaN; Pkh(cj1,ci1)=NaN; u2(cj1,ci1)=nan;
                 x(cj1,ci1)=(ii+(winsize/2)-1);
@@ -121,31 +123,31 @@ for jj=1:(1-overlap)*winsize:size(A,1)-winsize+1
             v(cj1,ci1)=NaN;
             SnR(cj1,ci1)=NaN;
             Pkh(cj1,ci1)=NaN;  u2(cj1,ci1)=nan;
-            ci1=ci1+1;
-        end
-        
+	    ci1=ci1+1;
+        end  
+
     end
     % Display calculation time
-    if size(sta,1)<=1
-        fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
-        fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
+    if size(sta,1)<=1   
+      fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
+      fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
     else
-        if isempty(strfind(sta(end).name,'matptv'))
-            fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
-            fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
-        end
-    end
+      if isempty(findstr(sta(end).name,'matptv'))   
+	fprintf('\r No. of vectors: %d', (cj1-1)*(ci1)+ci1-1 -sum(isnan(u(:))))
+	fprintf(' , Seconds taken: %f', toc); %etime(clock,t0));
+      end
+    end  
     
     ci1=1;
     cj1=cj1+1;
 end
 
-if size(sta,1)<=1
-    fprintf('.\n');
+if size(sta,1)<=1  
+  fprintf('.\n');
 else
-    if isempty(strfind(sta(end).name,'matptv'))
-        fprintf('.\n');
-    end
+  if isempty(findstr(sta(end).name,'matptv')) 
+      fprintf('.\n');
+  end
 end
 
 % now we inline the function XCORRF2 to shave off some time.
@@ -178,7 +180,7 @@ bt = fft2(a,mf,nf);
 %       multiply transforms then inverse transform
 c = ifft2(at.*bt);
 %       make real output for real input
-if ~any(any(imag(a))) && ~any(any(imag(b)))
+if ~any(any(imag(a))) & ~any(any(imag(b)))
     c = real(c);
 end
 %  trim to standard size

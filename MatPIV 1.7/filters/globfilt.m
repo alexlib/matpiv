@@ -29,10 +29,10 @@ function [hu,hv]=globfilt(x,y,u,v,varargin)
 %
 % See also MATPIV, SNRFILT, LOCALFILT, MASK
 
-% 1999 -2014 copyright J.K.Sveen jks@math.uio.no
+% 1999 -2004 copyright J.K.Sveen jks@math.uio.no
 % Dept. of Mathematics, Mechanics Division, University of Oslo, Norway
 %
-% For use with MatPIV 1.7 and later versions
+% For use with MatPIV 1.6.1
 % Distributed under the Gnu General Public License
 
 if nargin < 5

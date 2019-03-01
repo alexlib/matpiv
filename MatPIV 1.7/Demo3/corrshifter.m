@@ -10,8 +10,8 @@ A=A(16:47,16:47); B=B(16:47,16:47);
 
 
 figure
-pos=get(gcf,'Position');
-set(gcf,'Position',[pos(1:2) 400 270]);
+pos=get(gcf,'Position')
+set(gcf,'Position',[pos(1:2) 400 270])
 
 C=A-mean2(A);
 D=B-mean2(B);
@@ -27,11 +27,11 @@ tel=1;
 subplot(1,2,2)
 hold on
 
-%MakeQTMovie start film.mov
-%MakeQTMovie framerate 100
-%MakeQTMovie('size',[400 270])
-for j=[1:5:16,17:1:46,47:5:62]
-    for i=[1:5:16,17:1:46,47:5:62]
+MakeQTMovie start film.mov
+MakeQTMovie framerate 100
+MakeQTMovie('size',[400 270])
+for j=1:97
+    for i=1:97
         tmp2=tmp;
         tmp2(j:32+j-1,i:32+i-1)=B.*tmp(j:32+j-1,i:32+i-1);
         tmp2(tmp2>255)=tmp2(tmp2>255)/200;
@@ -42,17 +42,17 @@ for j=[1:5:16,17:1:46,47:5:62]
         axis off
         drawnow
         subplot(1,2,2)
-        imagesc(i:i+1,j:j+1,R(j:j+1,i:i+1))
+        imagesc([i:i+1],[j:j+1],R(j:j+1,i:i+1))
         caxis([0 0.5])
         axis([0.5 128.5 0.5 128.5])
         axis off
         drawnow
-        %MakeQTMovie addplot
+        MakeQTMovie addplot
         %[X,MAP]=capture;
         %M(tel)=im2frame(X,MAP);
         tel=tel+1;
     end
 end
-%MakeQTMovie finish
-%MakeQTMovie cleanup
+MakeQTMovie finish
+MakeQTMovie cleanup
 %save movie.mat M
